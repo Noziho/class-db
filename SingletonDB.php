@@ -10,6 +10,21 @@ class SingletonDB
     private static string $dsn = "mysql:host=%s;dbname=%s;charset=%s";
     private static ?PDO $objectPDO = null;
 
+    public function __construct()
+    {
+
+        try {
+            $dsn = sprintf(self::$dsn, Config::DB_SERVER, Config::DB_NAME, Config::DB_CHARSET);
+            self::$objectPDO = new PDO($dsn, Config::DB_USERNAME, Config::DB_PASSWORD);
+            self::$objectPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            echo "Connexion ok <br>";
+
+        }
+        catch (PDOException $e) {
+            echo $e->getMessage();
+        }
+    }
+
 
     /**
      * function to get a single instance of the class SingletonBD.
@@ -18,21 +33,8 @@ class SingletonDB
     public static function dbConnect(): ?PDO
     {
         if (self::$objectPDO === null) {
-            try {
-                /**
-                 * A local var dsn for use the global var dsn with a sprintf for use the Config file and clear the code.
-                 */
-                $dsn = sprintf(self::$dsn, Config::DB_SERVER, Config::DB_NAME, Config::DB_CHARSET);
-                self::$objectPDO = new PDO($dsn, Config::DB_USERNAME, Config::DB_PASSWORD);
-                self::$objectPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-                echo "Connexion ok <br>";
-
-            }
-            catch (PDOException $e) {
-                echo $e->getMessage();
-            }
+            new self;
         }
         return self::$objectPDO;
     }
-
 }
