@@ -1,6 +1,6 @@
 <?php
 
-class SingletonDB
+class DB_Connect
 {
 
     /**
@@ -26,7 +26,6 @@ class SingletonDB
                 self::$objectPDO = new PDO($dsn, Config::DB_USERNAME, Config::DB_PASSWORD);
                 self::$objectPDO->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
                 self::$objectPDO->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_ASSOC);
-                echo "Connexion ok <br>";
 
             }
             catch (PDOException $e) {
